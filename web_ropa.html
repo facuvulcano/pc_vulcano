@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Subscription Page</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background-color: #eee;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+        font-size: 24px;
+        margin: 0;
+      }
+      p {
+        color: #666;
+        font-size: 16px;
+        margin: 0;
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      label {
+        display: inline-block;
+        width: 150px;
+        font-weight: bold;
+      }
+      input {
+        width: 300px;
+        padding: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        padding: 5px 10px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .subscription-details {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Subscription Page</h1>
+    <form id="subscription-form">
+      <div class="form-group">
+        <label for="subscription-type">Subscription Type:</label>
+        <select id="subscription-type">
+          <option value="monthly">Monthly ($9.99/month)</option>
+          <option value="yearly">Yearly ($99.99/year)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="card-number">Card Number:</label>
+        <input type="text" id="card-number" placeholder="Enter your card number" />
+      </div>
+      <div class="form-group">
+        <label for="card-expiration-date">Expiration Date:</label>
+        <input type="text" id="card-expiration-date" placeholder="Enter your card expiration date" />
+      </div>
+      <div class="form-group">
+        <label for="card-cvv">CVV:</label>
+        <input type="text" id="card-cvv" placeholder="Enter your card CVV" />
+      </div>
+      <button type="submit">Get Subscription</button>
+      </form>
+      <div id="subscription-details" class="subscription-details">
+        <h2>Subscription Details</h2>
+        <p>Status: <span id="subscription-status">None</span></p>
+        <p>Type: <span id="subscription-type">None</span></p>
+        <p>Cost: <span id="subscription-cost">None</span></p>
+        <p>Expiration Date: <span id="subscription-expiration-date">None</span></p>
+        <button id="renew-subscription">Renew Subscription</button>
+        <button id="cancel-subscription">Cancel Subscription</button>
+        <button id="change-subscription">Change Subscription</button>
+      </div>
+      <script>
+        const subscriptionForm = document.getElementById("subscription-form");
+        const subscriptionDetails = document.getElementById("subscription-details");
+        const subscriptionStatus = document.getElementById("subscription-status");
+        const subscriptionType = document.getElementById("subscription-type");
+        const subscriptionCost = document.getElementById("subscription-cost");
+        const subscriptionExpirationDate = document.getElementById("subscription-expiration-date");
+        const renewSubscriptionButton = document.getElementById("renew-subscription");
+        const cancelSubscriptionButton = document.getElementById("cancel-subscription");
+        const changeSubscriptionButton = document.getElementById("change-subscription");
+
+        
+        // Create a new subscription object
+        const subscription = new Subscription(false);
+
+
+        // Submit the subscription form
+        subscriptionForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const subscriptionType = document.getElementById("subscription-type").value;
+          subscription.activate(subscriptionType);
+          updateSubscriptionDetails();
+          subscriptionForm.style.display = "none";
+          subscriptionDetails.style.display = "block";
+        });
+
+        // Renew the subscription
+        renewSubscriptionButton.addEventListener("click", (event) => {
+          subscription.renew();
+          updateSubscriptionDetails();
+        });
+
+        // Cancel the subscription
+        cancelSubscriptionButton.addEventListener("click", (event) => {
+          subscription.cancel();
+          updateSubscriptionDetails();
+          subscriptionForm.style.display = "block";
+          subscriptionDetails.style.display = "none";
+        });
+
+        // Change the subscription
+        changeSubscriptionButton.addEventListener("click", (event) => {
+          const subscriptionType = document.getElementById("subscription-type").value;
+          subscription.change(subscriptionType);
+          updateSubscriptionDetails();
+        });
+
+        // Update the subscription details
+        function updateSubscriptionDetails() {
+          subscriptionStatus.innerHTML = subscription.status ? "Active" : "Inactive";
+          subscriptionType.innerHTML = subscription.type ? subscription.type : "None";
+          subscriptionCost.innerHTML = subscription.cost ? `$${subscription.cost}` : "None";
+          subscriptionExpirationDate.innerHTML = subscription.expiration_date ? subscription.expiration_date.toDateString() : "None";
+        }
+    </script>
+  </body>
+</html>
+    
